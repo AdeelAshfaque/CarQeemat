@@ -1,0 +1,61 @@
+.cq-dark-page {
+  min-height: 100vh;
+  color: #f2f0e9;
+  background: #080909;
+  font-family: Inter, "Helvetica Neue", Arial, ui-sans-serif, system-ui, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.cq-dark-page .text-ink { color: #f2f0e9; }
+.cq-dark-page .text-muted { color: #a4a59f; }
+.cq-dark-page .text-accent { color: #ef6b32; }
+.cq-dark-page .border-line { border-color: #ffffff20; }
+.cq-dark-page [class~="bg-white/70"],
+.cq-dark-page [class~="bg-white/80"],
+.cq-dark-page [class~="bg-white/60"] {
+  border-color: #ffffff1b;
+  background: #111312;
+  box-shadow: 0 10px 28px #00000024;
+}
+.cq-dark-page [class~="bg-paper"] { background: #191b19; }
+.cq-dark-page [class~="bg-ink"] { background: #111312; }
+.cq-dark-page [class~="text-paper"] { color: #f2f0e9; }
+.cq-dark-page [class~="bg-accent"].text-ink { color: #111312; }
+.cq-dark-page .cq-shared-header .text-ink { color: #111312; }
+.cq-dark-page .cq-shared-header nav a { font-size: 0.8125rem; font-weight: 700; }
+
+.cq-dark-page input:not([type="checkbox"]) {
+  border-color: #ffffff24;
+  background: #171918;
+  color: #f2f0e9;
+}
+.cq-dark-page input:not([type="checkbox"])::placeholder { color: #858780; }
+.cq-dark-page input:not([type="checkbox"]):focus {
+  border-color: #ef6b32;
+  outline: 2px solid #ef6b3238;
+  outline-offset: 1px;
+  box-shadow: none;
+}
+.cq-dark-page input[type="checkbox"] { accent-color: #ef6b32; }
+.cq-dark-page label:has(input[type="checkbox"]):hover { border-color: #ef6b3280; }
+.cq-dark-page summary { color: #f2f0e9; }
+.cq-dark-page summary:focus-visible,
+.cq-dark-page button:focus-visible,
+.cq-dark-page a:focus-visible {
+  outline: 2px solid #ff9a5f;
+  outline-offset: 3px;
+}
+.cq-dark-page main section.bg-ink {
+  border: 1px solid #ef6b3238;
+  background: linear-gradient(145deg, #191b19, #101211);
+}
+
+.cq-insights-page article[class~="bg-white/60"] { border-radius: 1rem; box-shadow: none; }
+.cq-insights-page main > section { scroll-margin-top: 24px; }
+
+@media (max-width: 640px) {
+  .cq-dark-page main { padding-top: 1.5rem; }
+}
