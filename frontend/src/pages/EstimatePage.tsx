@@ -12,10 +12,11 @@ import {
 import { Link } from 'react-router-dom'
 import FormField from '../components/FormField'
 import PredictionResult from '../components/PredictionResult'
+import SelectField from '../components/SelectField'
 import SiteFooter from '../components/SiteFooter'
 import SiteHeader from '../components/SiteHeader'
 import { carFeatureGroups } from '../data/carFeatures'
-import { vehicleSuggestions } from '../data/vehicleSuggestions'
+import { vehicleOptions } from '../data/vehicleOptions'
 import { predictCarPrice, PredictionApiError } from '../services/predictionApi'
 import type {
   CarFormValues,
@@ -74,12 +75,29 @@ function EstimatePage() {
   const [prediction, setPrediction] = useState<CarPredictionResponse | null>(null)
   const [submittedCar, setSubmittedCar] =
     useState<CarPredictionRequest | null>(null)
+  const selectedMake = vehicleOptions.makes.find(
+    (make) => make === values.make,
+  )
+  const availableModels = selectedMake
+    ? vehicleOptions.modelsByMake[selectedMake]
+    : []
 
   function updateField<Field extends keyof CarFormValues>(
     field: Field,
     value: CarFormValues[Field],
   ) {
     setValues((currentValues) => ({ ...currentValues, [field]: value }))
+    setApiError(null)
+    setPrediction(null)
+    setSubmittedCar(null)
+  }
+
+  function updateMake(value: string) {
+    setValues((currentValues) => ({
+      ...currentValues,
+      make: value,
+      model: '',
+    }))
     setApiError(null)
     setPrediction(null)
     setSubmittedCar(null)
@@ -155,9 +173,9 @@ function EstimatePage() {
               Tell us about your car.
             </h1>
             <p className="mt-4 text-base leading-7 text-muted">
-              Add the details you know. Suggestions come from categories
-              represented in the trained model; you can also enter another
-              value.
+              Select from the vehicle categories represented in the trained
+              model. Year, mileage, and available features complete your
+              estimate.
             </p>
           </div>
 
@@ -187,22 +205,25 @@ function EstimatePage() {
                   </h2>
                 </div>
                 <div className="grid gap-5 sm:grid-cols-2">
-                  <FormField
+                  <SelectField
                     id="make"
                     label="Make"
-                    onChange={(value) => updateField('make', value)}
-                    placeholder="e.g. Honda"
+                    onChange={updateMake}
+                    options={vehicleOptions.makes}
+                    placeholder="Select make"
                     required
-                    suggestions={vehicleSuggestions.make}
                     value={values.make}
                   />
-                  <FormField
+                  <SelectField
                     id="model"
                     label="Model"
                     onChange={(value) => updateField('model', value)}
-                    placeholder="e.g. Civic Oriel"
+                    disabled={!selectedMake}
+                    options={availableModels}
+                    placeholder={
+                      selectedMake ? 'Select model' : 'Select make first'
+                    }
                     required
-                    suggestions={vehicleSuggestions.model}
                     value={values.model}
                   />
                   <FormField
@@ -245,49 +266,49 @@ function EstimatePage() {
                     Vehicle specifications
                   </h2>
                   <p className="mt-2 text-sm leading-6 text-muted">
-                    Optional details. Choose a suggestion or type the value that
-                    matches your car.
+                    Optional details. Choose a value from the trained model&apos;s
+                    categories.
                   </p>
                 </div>
                 <div className="grid gap-5 sm:grid-cols-2">
-                  <FormField
+                  <SelectField
                     id="fuel"
                     label="Fuel"
                     onChange={(value) =>
                       updateField('fuel', value === '' ? null : value)
                     }
-                    placeholder="Select or type fuel"
-                    suggestions={vehicleSuggestions.fuel}
+                    options={vehicleOptions.fuel}
+                    placeholder="Select fuel (optional)"
                     value={values.fuel ?? ''}
                   />
-                  <FormField
+                  <SelectField
                     id="transmission"
                     label="Transmission"
                     onChange={(value) =>
                       updateField('transmission', value === '' ? null : value)
                     }
-                    placeholder="Select or type transmission"
-                    suggestions={vehicleSuggestions.transmission}
+                    options={vehicleOptions.transmission}
+                    placeholder="Select transmission (optional)"
                     value={values.transmission ?? ''}
                   />
-                  <FormField
+                  <SelectField
                     id="assembly"
                     label="Assembly"
                     onChange={(value) =>
                       updateField('assembly', value === '' ? null : value)
                     }
-                    placeholder="Select or type assembly"
-                    suggestions={vehicleSuggestions.assembly}
+                    options={vehicleOptions.assembly}
+                    placeholder="Select assembly (optional)"
                     value={values.assembly ?? ''}
                   />
-                  <FormField
+                  <SelectField
                     id="car_documents"
                     label="Car documents"
                     onChange={(value) =>
                       updateField('car_documents', value === '' ? null : value)
                     }
-                    placeholder="Select or type document status"
-                    suggestions={vehicleSuggestions.car_documents}
+                    options={vehicleOptions.car_documents}
+                    placeholder="Select document status (optional)"
                     value={values.car_documents ?? ''}
                   />
                 </div>
@@ -309,17 +330,17 @@ function EstimatePage() {
                   </h2>
                 </div>
                 <div className="grid gap-5 sm:grid-cols-2">
-                  <FormField
+                  <SelectField
                     id="registration_type"
                     label="Registration type"
                     onChange={(value) =>
                       updateField('registration_type', value === '' ? null : value)
                     }
-                    placeholder="Select or type registration type"
-                    suggestions={vehicleSuggestions.registration_type}
+                    options={vehicleOptions.registration_type}
+                    placeholder="Select registration type (optional)"
                     value={values.registration_type ?? ''}
                   />
-                  <FormField
+                  <SelectField
                     id="registration_location_group"
                     label="Registration location group"
                     onChange={(value) =>
@@ -328,8 +349,8 @@ function EstimatePage() {
                         value === '' ? null : value,
                       )
                     }
-                    placeholder="Select or type location"
-                    suggestions={vehicleSuggestions.registration_location_group}
+                    options={vehicleOptions.registration_location_group}
+                    placeholder="Select registration location (optional)"
                     value={values.registration_location_group ?? ''}
                   />
                 </div>
@@ -351,17 +372,17 @@ function EstimatePage() {
                   </h2>
                 </div>
                 <div className="grid gap-5 sm:grid-cols-2">
-                  <FormField
+                  <SelectField
                     id="seller_city"
                     label="Seller city"
                     onChange={(value) =>
                       updateField('seller_city', value === '' ? null : value)
                     }
-                    placeholder="Select or type city"
-                    suggestions={vehicleSuggestions.seller_city}
+                    options={vehicleOptions.seller_city}
+                    placeholder="Select seller city (optional)"
                     value={values.seller_city ?? ''}
                   />
-                  <FormField
+                  <SelectField
                     id="seller_location_type"
                     label="Seller location type"
                     onChange={(value) =>
@@ -370,8 +391,8 @@ function EstimatePage() {
                         value === '' ? null : value,
                       )
                     }
-                    placeholder="Select or type location type"
-                    suggestions={vehicleSuggestions.seller_location_type}
+                    options={vehicleOptions.seller_location_type}
+                    placeholder="Select seller location type (optional)"
                     value={values.seller_location_type ?? ''}
                   />
                 </div>

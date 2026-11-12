@@ -39,6 +39,20 @@
   outline-offset: 1px;
   box-shadow: none;
 }
+.cq-dark-page select {
+  border-color: #ffffff24;
+  background-color: #171918;
+  color: #f2f0e9;
+}
+.cq-dark-page select option {
+  background-color: #171918;
+  color: #f2f0e9;
+}
+.cq-dark-page select:focus {
+  border-color: #ef6b32;
+  outline: 2px solid #ef6b3238;
+  outline-offset: 1px;
+}
 .cq-dark-page input[type="checkbox"] { accent-color: #ef6b32; }
 .cq-dark-page label:has(input[type="checkbox"]):hover { border-color: #ef6b3280; }
 .cq-dark-page summary { color: #f2f0e9; }
